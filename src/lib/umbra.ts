@@ -51,7 +51,7 @@ export class UmbraService {
       }
     }
     
-    // Fallback Mock
+    // Fallback for demo
     return `vk_umbra_${Math.random().toString(36).substring(7)}`;
   }
 }
