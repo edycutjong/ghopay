@@ -1,19 +1,18 @@
-import { Umbra, RandomNumberGenerator } from "@umbra-privacy/sdk";
+import { getUmbraClient } from "@umbra-privacy/sdk";
 
 export class UmbraService {
-  private provider: any = null; // Normally Web3Provider or Solana Connection
+  private provider: any = null;
   private umbraClient: any = null;
 
   init() {
     if (this.umbraClient) return;
     try {
-      // In a real environment, this connects to the user's injected wallet provider
       this.provider = globalThis.window ? (globalThis.window as any).ethereum : null;
       if (this.provider) {
-        this.umbraClient = new Umbra(this.provider, 1); // 1 = Mainnet chainId
+        this.umbraClient = getUmbraClient(this.provider, { chainId: 1 });
       }
-    } catch (e) {
-      console.warn("[Umbra SDK] Provider not found, falling back to read-only or mock logic");
+    } catch (_e) {
+      console.warn("[Umbra SDK] Provider not found, using fallback mode");
     }
   }
 
