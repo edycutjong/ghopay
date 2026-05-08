@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   description: "Private batch payroll via Cloak SDK",
 };
 
+import { StatusBar } from "@/components/StatusBar";
+import { Footer } from "@/components/Footer";
+import { TechStack } from "@/components/TechStack";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -28,7 +32,14 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrainsMono.variable} dark antialiased`}
       style={{ colorScheme: "dark" }}
     >
-      <body className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">{children}</body>
+      <body className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+        <StatusBar />
+        <div className="flex-grow">
+          {children}
+        </div>
+        <TechStack />
+        <Footer />
+      </body>
     </html>
   );
 }
