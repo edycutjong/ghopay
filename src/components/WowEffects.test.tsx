@@ -103,14 +103,6 @@ describe('ParticleBackground', () => {
       height: 0,
     };
 
-    // Override createElement for canvas
-    const originalCreateElement = document.createElement.bind(document);
-    vi.spyOn(document, 'createElement').mockImplementation((tagName: string, options?: ElementCreationOptions) => {
-      if (tagName === 'canvas') {
-        return canvasMock as unknown as HTMLCanvasElement;
-      }
-      return originalCreateElement(tagName, options);
-    });
 
     let frameCb: FrameRequestCallback | null = null;
     vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
