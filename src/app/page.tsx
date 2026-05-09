@@ -8,17 +8,16 @@ import { HeroLanding } from "@/components/HeroLanding";
 
 export default function Home() {
   const [showDashboard, setShowDashboard] = useState(false);
-  const [employees, setEmployees] = useState([
+  const [employees, setEmployees] = useState<{ id: string; name: string; role: string; amount: string; status: string; stealthAddress: string | null }[]>([
     { id: 'EMP-01', name: 'Alice', role: 'Smart Contract Engineer', amount: '5,000 USDC', status: 'Pending', stealthAddress: null },
     { id: 'EMP-02', name: 'Bob', role: 'Frontend Developer', amount: '4,500 USDC', status: 'Pending', stealthAddress: null },
     { id: 'EMP-03', name: 'Charlie', role: 'Designer', amount: '3,800 USDC', status: 'Pending', stealthAddress: null },
   ]);
 
   const [isExecuting, setIsExecuting] = useState(false);
-  const [executionResult, setExecutionResult] = useState<{ txHash: string } | null>(null);
 
-  const handleBatchSuccess = (results: any[], txHash: string) => {
-    setExecutionResult({ txHash });
+  const handleBatchSuccess = (results: { stealthAddress: string }[], txHash: string) => {
+    console.log("Batch executed:", txHash);
     setEmployees(prev => prev.map((emp, idx) => ({
       ...emp,
       status: 'Executed (Stealth)',

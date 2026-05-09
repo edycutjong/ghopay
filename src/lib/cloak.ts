@@ -1,18 +1,18 @@
 // Mock SDK for Frontier Cloak on Solana
 
 export class CloakService {
-  private provider: any = null;
-  private cloakClient: any = null;
+  private provider: unknown = null;
+  private cloakClient: unknown = null;
 
   init() {
     if (this.cloakClient) return;
     try {
-      this.provider = globalThis.window ? (globalThis.window as any).solana : null;
+      this.provider = globalThis.window ? (globalThis.window as { solana?: unknown }).solana : null;
       if (this.provider) {
         // mock init
         this.cloakClient = { initialized: true };
       }
-    } catch (_e) {
+    } catch {
       console.warn("[Cloak SDK] Provider not found, using fallback mode");
     }
   }

@@ -1,69 +1,155 @@
 <div align="center">
-  <img src="docs/assets/readme-hero.png" alt="Ghopay Hero" width="100%">
-  
-  <p><em>Private batch payroll with Viewing Keys for auditors via Cloak SDK.</em></p>
-  
-  [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://cloak.vercel.app)
-  [![Pitch Video](https://img.shields.io/badge/Pitch-Video-red.svg)](https://youtube.com/your-video)
-  [![GitHub](https://img.shields.io/badge/GitHub-Repository-black.svg)](https://github.com/edycutjong/frontier-cloak)
+
+# Ghopay
+
+<img src="docs/readme-hero.png" alt="Ghopay Hero Image" width="800">
+
+**Private batch payroll for DAOs — powered by Cloak SDK on Solana.**
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://cloak.vercel.app)
+[![Tests](https://img.shields.io/badge/tests-67%20passing-brightgreen.svg)](#testing)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
+[![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF.svg)](https://solana.com)
+
 </div>
 
 ---
 
-## 📸 See it in Action
-*(Demo GIF and UI screenshots can be found in the `docs/assets` directory)*
+## The Problem
 
-<div align="center">
-  <img src="docs/assets/og-image.png" alt="App Demo" width="800">
-</div>
+Crypto payroll is fully public. When a DAO paid 47 contributors on-chain, 12 received targeted phishing emails within 24 hours — each referencing the exact salary amount visible on the explorer.
 
-## 💡 The Problem & Solution
-Private batch payroll with Viewing Keys for auditors via Cloak SDK.
+Ghopay solves this with **stealth addresses**: individual salary amounts are invisible on public block explorers, while the treasury remains auditable via **Viewing Keys** issued to HR and compliance officers.
 
-**Ghopay** solves this by providing: 
-Private batch payroll with Viewing Keys for auditors via Cloak SDK.
+---
 
-**Key Features:**
-- ⚡ **High Performance:** Seamless integration and optimized workflows.
-- 🔒 **Secure by Design:** Verifiable on-chain actions and robust data protection.
-- 🎨 **Intuitive UX:** Beautiful, user-centric interface built for scale.
+## How It Works
 
-## 🏗️ Architecture & Tech Stack
-We built the frontend using **Next.js 16** and **Tailwind CSS v4**.
+```
+Treasury Wallet
+      │
+      ▼  executeStealthBatch()
+ Cloak SDK ──► generates a unique stealth address per employee
+      │
+      ├──► Alice  →  stealth_addr_A  (5,000 USDC hidden)
+      ├──► Bob    →  stealth_addr_B  (4,500 USDC hidden)
+      └──► Charlie→  stealth_addr_C  (3,800 USDC hidden)
 
-
-```mermaid
-graph TD
-    A[User Wallet] -->|Input| B(Next.js App Router)
-    B -->|Execute| C{SDK Integration}
-    C -->|Return Result| D[Core Logic]
-    D -->|Process| E{Validation & Settlement}
-    E -->|Final State| F[Dashboard UI]
+HR / Auditor
+      │
+      ▼  generateViewingKey()
+ cloak_vk_<base58> ──► decrypts full payroll for compliance review
 ```
 
-See the [Architecture Document](docs/ARCHITECTURE.md) and [Product Requirements Document](docs/PRD.md) for full system specifications.
+No individual salary is visible on-chain. The treasury debit is public, the per-employee amounts are not.
 
-## 🏆 Sponsor Tracks Targeted
-* Check `docs/SPONSOR_DEFENSE.md` for our full sponsor integration strategy.
+---
 
-## 🚀 Run it Locally (For Judges)
+## Features
 
-1. **Clone the repo:**
-   ```bash
-   git clone https://github.com/edycutjong/frontier-cloak.git
-   cd frontier-cloak
-   ```
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-3. **Set up environment variables:** 
-   Rename `.env.example` to `.env.local` and add your keys.
-4. **Run the app:**
-   ```bash
-   npm run dev
-   ```
+| Feature | Description |
+|---|---|
+| **Stealth batch transfers** | Send to N employees in a single transaction |
+| **Viewing Keys** | Scoped disclosure for HR/auditors without exposing data publicly |
+| **Animated UI** | ScrambleText reveals stealth addresses as they are assigned |
+| **Particle background** | Canvas-based visual indicating network activity |
+| **Health endpoint** | `GET /api/health` for uptime monitoring |
 
-> **Note for Judges:** 
-> Detailed submission materials, demo scripts, and sponsor defenses are located in the `docs/` directory.
-> Read `docs/SUBMISSION.md` for the complete pitch and `docs/SPONSOR_DEFENSE.md` for technical implementation details.
+---
+
+## Architecture
+
+```mermaid
+graph TB
+    subgraph Frontend["Next.js 16 App Router"]
+        A[HeroLanding] -->|onEnter| B[HR Dashboard]
+        B --> C[EmployeeTable]
+        B --> D[PayrollActions]
+        D -->|executeStealthBatch| E[CloakService]
+        D -->|generateViewingKey| E
+    end
+
+    subgraph Lib["src/lib"]
+        E -->|mock SDK| F[base58 address gen]
+    end
+
+    subgraph API["API Routes"]
+        G[GET /api/health]
+    end
+```
+
+**Tech stack:**
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16, React 19 |
+| Styling | Tailwind CSS v4 |
+| Animation | Framer Motion, canvas particles |
+| Privacy SDK | Cloak SDK (Solana stealth addresses) |
+| Testing | Vitest + Testing Library |
+| Language | TypeScript |
+
+---
+
+## Run Locally
+
+```bash
+git clone https://github.com/edycutjong/frontier-cloak.git
+cd frontier-cloak
+npm install
+cp .env.example .env.local   # add your keys
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## Testing
+
+67 unit tests across all components, services, and the health API route.
+
+```bash
+npm test              # watch mode
+npm run test:coverage # single run with coverage report
+npm run ci            # typecheck + lint + coverage (CI gate)
+```
+
+Test files live alongside source files (`*.test.ts` / `*.test.tsx`).
+
+Coverage spans:
+
+- `src/lib/cloak.ts` — CloakService: init, executeStealthBatch, generateViewingKey
+- `src/app/api/health/route.ts` — response shape and field types
+- `src/components/` — all seven UI components
+- `src/app/page.tsx` — dashboard navigation flow
+- `src/app/about/page.tsx` — static content
+
+---
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── api/health/route.ts   # uptime endpoint
+│   ├── about/page.tsx        # about page
+│   ├── layout.tsx            # root layout (StatusBar, Footer, TechStack)
+│   └── page.tsx              # main HR dashboard
+├── components/
+│   ├── EmployeeTable.tsx     # payroll table with stealth address reveal
+│   ├── Footer.tsx
+│   ├── HeroLanding.tsx       # animated landing screen
+│   ├── PayrollActions.tsx    # execute batch + generate viewing key
+│   ├── StatusBar.tsx         # system status header
+│   ├── TechStack.tsx         # tech badges
+│   └── WowEffects.tsx        # ScrambleText + ParticleBackground
+└── lib/
+    └── cloak.ts              # CloakService (Solana SDK wrapper)
+```
+
+---
+
+## Hackathon
+
+Built for **Colosseum Frontier Hackathon 2026** — solo submission.

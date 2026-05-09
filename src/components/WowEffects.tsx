@@ -12,11 +12,11 @@ export function ScrambleText({ text, trigger, duration = 1500, className = "" }:
 
   useEffect(() => {
     if (!trigger) {
-      setDisplayText("****************");
-      return;
+      const t = setTimeout(() => setDisplayText("****************"), 0);
+      return () => clearTimeout(t);
     }
 
-    let start = Date.now();
+    const start = Date.now();
     let frame: number;
 
     const tick = () => {

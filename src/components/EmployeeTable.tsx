@@ -13,7 +13,7 @@ interface Employee {
 export function EmployeeTable({ employees }: { employees: Employee[] }) {
   return (
     <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-xl overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.5)]">
-      <div className="p-6 border-b border-slate-700/50 flex justify-between items-center bg-gradient-to-r from-slate-900/80 to-transparent">
+      <div className="p-6 border-b border-slate-700/50 flex justify-between items-center bg-linear-to-r from-slate-900/80 to-transparent">
         <h3 className="text-slate-100 font-semibold tracking-wide flex items-center gap-2">
           March 2026 Payroll Run
         </h3>
@@ -43,7 +43,7 @@ export function EmployeeTable({ employees }: { employees: Employee[] }) {
                   {emp.stealthAddress && (
                     <div className="text-[10px] text-cyan-500/70 font-mono mt-1 flex flex-col">
                       <span>Dest:</span>
-                      <ScrambleText text={emp.stealthAddress} trigger={!!emp.stealthAddress} duration={2000 + Math.random() * 1000} />
+                      <ScrambleText text={emp.stealthAddress} trigger={!!emp.stealthAddress} duration={2500} />
                     </div>
                   )}
                 </td>

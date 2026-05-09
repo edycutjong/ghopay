@@ -14,7 +14,7 @@ interface PayrollActionsProps {
   employees: Employee[];
   isExecuting: boolean;
   setIsExecuting: (val: boolean) => void;
-  onSuccess: (results: any[], txHash: string) => void;
+  onSuccess: (results: { stealthAddress: string }[], txHash: string) => void;
 }
 
 export function PayrollActions({ employees, isExecuting, setIsExecuting, onSuccess }: PayrollActionsProps) {
@@ -81,7 +81,7 @@ export function PayrollActions({ employees, isExecuting, setIsExecuting, onSucce
             className="w-full bg-cyan-600 hover:bg-cyan-500 disabled:bg-slate-800 disabled:text-slate-500 text-white font-semibold py-3 px-4 rounded-lg shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] transition-all flex justify-center items-center gap-2 group relative overflow-hidden"
           >
             {isExecuting && (
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[100%] animate-[shimmer_1.5s_infinite]"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]"></div>
             )}
             <svg className={`w-5 h-5 ${isExecuting ? 'animate-spin' : 'group-hover:scale-110 transition-transform'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               {isExecuting ? (

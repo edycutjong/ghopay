@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ghopay - Pitch Deck</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/monokai.min.css">
+
+    <style>
+      .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+        text-transform: none;
+        font-family: 'Inter', system-ui, sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .reveal .brand-text {
+        background: linear-gradient(90deg, #a855f7, #06b6d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+      }
+      .reveal .subtext {
+        color: #94a3b8;
+        font-size: 0.6em;
+        margin-top: -10px;
+      }
+      .reveal .slide-background {
+        background: radial-gradient(circle at 50% 50%, #1e1b4b 0%, #000000 100%);
+      }
+      .reveal ul {
+        display: block;
+        width: 80%;
+        margin: 0 auto;
+        text-align: left;
+      }
+      .reveal li {
+        margin-bottom: 20px;
+        color: #e2e8f0;
+      }
+      .reveal .highlight {
+        color: #22d3ee;
+        font-weight: 600;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        align-items: center;
+      }
+      .metric-box {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+      }
+      .metric-value {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #06b6d4;
+        margin: 0;
+      }
+      .metric-label {
+        font-size: 0.5em;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-top: 10px;
+      }
+      .footer-badge {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        font-size: 14px;
+        color: #64748b;
+        font-family: monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        
+        <!-- Slide 1: Title -->
+        <section>
+          <h1 class="brand-text">Ghopay</h1>
+          <p>Private Batch Payroll for DAOs & Web3 Teams</p>
+          <p class="subtext">Powered by Cloak SDK on Solana</p>
+          <div style="margin-top: 50px;">
+            <small style="color: #64748b; letter-spacing: 2px; text-transform: uppercase;">Colosseum Frontier Hackathon 2026</small>
+          </div>
+        </section>
+
+        <!-- Slide 2: The Problem -->
+        <section>
+          <h2>The <span style="color: #ef4444;">Problem</span></h2>
+          <p style="font-size: 1.2em; line-height: 1.4; color: #cbd5e1;">Crypto payroll is <strong>fully public</strong>.</p>
+          <p style="text-align: left; font-size: 0.8em; margin: 40px auto; width: 80%; color: #94a3b8; border-left: 4px solid #ef4444; padding-left: 20px;">
+            "When a DAO paid 47 contributors on-chain, 12 received targeted phishing emails within 24 hours — each referencing the exact salary amount visible on the explorer."
+          </p>
+          <ul>
+            <li>Employees are doxxed by their wallet balances</li>
+            <li>Compensation details are exposed to competitors</li>
+            <li>Treasuries face friction adopting on-chain rails</li>
+          </ul>
+        </section>
+
+        <!-- Slide 3: The Solution -->
+        <section>
+          <h2>The <span class="brand-text">Solution</span></h2>
+          <p>Ghopay uses <strong>Stealth Addresses</strong> to mask individual salaries.</p>
+          
+          <div class="grid-2" style="margin-top: 40px;">
+            <div class="metric-box">
+              <div style="font-size: 3em;">🕵️‍♂️</div>
+              <h3 style="margin-top: 20px; font-size: 1.2em;">Invisible Transfers</h3>
+              <p style="font-size: 0.6em; color: #94a3b8;">Per-employee amounts are completely hidden on block explorers.</p>
+            </div>
+            <div class="metric-box">
+              <div style="font-size: 3em;">🔍</div>
+              <h3 style="margin-top: 20px; font-size: 1.2em;">Auditable Compliance</h3>
+              <p style="font-size: 0.6em; color: #94a3b8;">HR uses Viewing Keys to generate compliance reports for auditors.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Slide 4: How it Works -->
+        <section>
+          <h2>How It Works</h2>
+          <pre><code class="language-plaintext" data-trim style="font-size: 0.9em; line-height: 1.5; padding: 20px; border-radius: 12px;">
+Treasury Wallet
+      │
+      ▼  executeStealthBatch()
+ Cloak SDK ──► unique stealth address per employee
+      │
+      ├──► Alice  →  stealth_addr_A  (5,000 USDC hidden)
+      ├──► Bob    →  stealth_addr_B  (4,500 USDC hidden)
+      └──► Charlie→  stealth_addr_C  (3,800 USDC hidden)
+
+HR / Auditor
+      │
+      ▼  generateViewingKey()
+ cloak_vk_... ──► decrypts payroll for compliance
+          </code></pre>
+        </section>
+
+        <!-- Slide 5: Cloak SDK Integration -->
+        <section>
+          <h2>Cloak SDK Integration</h2>
+          <p style="font-size: 0.8em; margin-bottom: 40px;">Deeply integrated with 4 core primitives:</p>
+          <ul>
+            <li><span class="highlight">Transfers:</span> Private value movement</li>
+            <li><span class="highlight">Batch:</span> O(1) operational overhead for employer</li>
+            <li><span class="highlight">Stealth:</span> Dynamic address generation</li>
+            <li><span class="highlight">Viewing Keys:</span> "HR Compliance for Crypto"</li>
+          </ul>
+        </section>
+
+        <!-- Slide 6: Engineering Quality -->
+        <section>
+          <h2>Production Ready</h2>
+          <div class="grid-2" style="margin-top: 40px;">
+            <div class="metric-box">
+              <p class="metric-value">100%</p>
+              <p class="metric-label">Test Coverage</p>
+            </div>
+            <div class="metric-box">
+              <p class="metric-value">Zero</p>
+              <p class="metric-label">Lint Warnings</p>
+            </div>
+          </div>
+          <p style="font-size: 0.6em; color: #94a3b8; margin-top: 40px;">
+            Built with Next.js 16 App Router, React 19, Tailwind CSS v4, and Vitest. Fully automated CI pipeline.
+          </p>
+        </section>
+
+        <!-- Slide 7: Demo / Links -->
+        <section>
+          <h2>Experience <span class="brand-text">Ghopay</span></h2>
+          <div style="margin-top: 40px; text-align: left; width: 60%; margin: 40px auto; background: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+            <p style="margin: 10px 0;"><strong style="color: #22d3ee;">Live Demo:</strong> <a href="https://cloak.vercel.app" target="_blank" style="color: #fff;">cloak.vercel.app</a></p>
+            <p style="margin: 10px 0;"><strong style="color: #22d3ee;">GitHub:</strong> <a href="https://github.com/edycutjong/frontier-cloak" target="_blank" style="color: #fff;">edycutjong/frontier-cloak</a></p>
+          </div>
+          <p style="font-size: 0.7em; color: #94a3b8; margin-top: 40px;">Thank you for your time.</p>
+        </section>
+
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+        transition: 'slide',
+        backgroundTransition: 'fade',
+        plugins: [ RevealHighlight ]
+      });
+    </script>
+  </body>
+</html>
