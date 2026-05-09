@@ -11,6 +11,8 @@ vi.mock('@/lib/cloak', () => ({
       ],
     }),
     generateViewingKey: vi.fn().mockResolvedValue('cloak_vk_mockkey'),
+    init: vi.fn().mockResolvedValue(undefined),
+    isLive: false,
   },
 }));
 

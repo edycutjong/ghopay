@@ -1,8 +1,49 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { CloakService, cloakService } from './cloak';
 
-// Speed up timers
-vi.useFakeTimers();
+// Mock all Cloak SDK imports — we don't want real on-chain calls in tests
+vi.mock('@cloak.dev/sdk', () => ({
+  CLOAK_PROGRAM_ID: { toBase58: () => 'zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW' },
+  NATIVE_SOL_MINT: { toBase58: () => 'So11111111111111111111111111111111111111112' },
+  createUtxo: vi.fn().mockResolvedValue({ amount: 1000000n }),
+  createZeroUtxo: vi.fn().mockResolvedValue({ amount: 0n }),
+  generateUtxoKeypair: vi.fn().mockResolvedValue({
+    publicKey: new Uint8Array(32),
+    privateKey: new Uint8Array(32),
+  }),
+  getNkFromUtxoPrivateKey: vi.fn().mockReturnValue(new Uint8Array(32)),
+  transact: vi.fn().mockResolvedValue({
+    outputUtxos: [{ amount: 1000000n }],
+    merkleTree: {},
+  }),
+  fullWithdraw: vi.fn().mockResolvedValue({ signature: 'mockWithdrawSig' }),
+  scanTransactions: vi.fn().mockResolvedValue([]),
+  toComplianceReport: vi.fn().mockReturnValue({
+    summary: 'No transactions found',
+    transactions: [],
+  }),
+}));
+
+vi.mock('@solana/web3.js', () => {
+  class MockConnection {
+    rpcEndpoint = 'mock';
+  }
+  return {
+    Connection: MockConnection,
+    Keypair: {
+      fromSecretKey: vi.fn().mockReturnValue({
+        publicKey: { toBase58: () => 'MockPublicKey123' },
+        secretKey: new Uint8Array(64),
+      }),
+      generate: vi.fn().mockReturnValue({
+        publicKey: {
+          toBase58: () => 'StealthAddr' + Math.random().toString(36).slice(2, 10),
+        },
+      }),
+    },
+    PublicKey: vi.fn().mockImplementation((s: string) => ({ toBase58: () => s })),
+  };
+});
 
 describe('CloakService', () => {
   let service: CloakService;
@@ -10,157 +51,97 @@ describe('CloakService', () => {
   beforeEach(() => {
     service = new CloakService();
     vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   describe('init()', () => {
-    it('does not throw when window.solana is absent', () => {
-      expect(() => service.init()).not.toThrow();
+    it('does not throw on first call', async () => {
+      await expect(service.init()).resolves.toBeUndefined();
     });
 
-    it('is idempotent — calling twice is safe', () => {
-      service.init();
-      expect(() => service.init()).not.toThrow();
+    it('is idempotent — calling twice is safe', async () => {
+      await service.init();
+      await expect(service.init()).resolves.toBeUndefined();
     });
 
-    it('initializes cloakClient if window.solana is present', () => {
-      // Mock window.solana
-      const originalWindow = globalThis.window;
-      (globalThis as unknown as Record<string, unknown>).window = { solana: {} };
-      
-      expect(() => service.init()).not.toThrow();
-      expect(() => service.init()).not.toThrow(); // Should hit the early return
-      
-      // Cleanup
-      (globalThis as unknown as Record<string, unknown>).window = originalWindow;
-    });
-
-    it('does not initialize cloakClient if window.solana is missing', () => {
-      // Mock window without solana
-      const originalWindow = globalThis.window;
-      (globalThis as unknown as Record<string, unknown>).window = {};
-      
-      expect(() => service.init()).not.toThrow();
-      
-      // Cleanup
-      (globalThis as unknown as Record<string, unknown>).window = originalWindow;
-    });
-
-    it('handles globalThis.window being undefined', () => {
-      const originalWindow = globalThis.window;
-      Object.defineProperty(globalThis, 'window', {
-        value: undefined,
-        configurable: true
-      });
-      
-      expect(() => service.init()).not.toThrow();
-      
-      Object.defineProperty(globalThis, 'window', {
-        value: originalWindow,
-        configurable: true
-      });
-    });
-
-
-    it('catches and logs a warning if accessing window throws', () => {
-      const originalWindowDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'window');
-      const consoleWarnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-      Object.defineProperty(globalThis, 'window', {
-        get() {
-          throw new Error('Access denied');
-        },
-        configurable: true
-      });
-
-      service.init();
-      expect(consoleWarnSpy).toHaveBeenCalledWith("[Cloak SDK] Provider not found, using fallback mode");
-
-      // Cleanup
-      if (originalWindowDescriptor) {
-        Object.defineProperty(globalThis, 'window', originalWindowDescriptor);
-      } else {
-        delete (globalThis as { window?: unknown }).window;
-      }
-      consoleWarnSpy.mockRestore();
+    it('defaults to demo mode when no KEYPAIR_PATH is set', async () => {
+      await service.init();
+      expect(service.isLive).toBe(false);
     });
   });
 
-  describe('executeStealthBatch()', () => {
+  describe('executeStealthBatch() — demo mode', () => {
     it('returns a txHash and one result per transaction', async () => {
       const transactions = [
         { recipient: 'Alice', amount: '5000 USDC' },
         { recipient: 'Bob', amount: '4500 USDC' },
       ];
 
-      const promise = service.executeStealthBatch(transactions);
-      vi.advanceTimersByTime(2000);
-      const { txHash, results } = await promise;
+      const { txHash, results } = await service.executeStealthBatch(transactions);
 
       expect(typeof txHash).toBe('string');
       expect(txHash.length).toBe(88);
       expect(results).toHaveLength(2);
-    });
+    }, 10000);
 
     it('each result preserves recipient and amount and adds a stealthAddress', async () => {
       const transactions = [{ recipient: 'Charlie', amount: '3800 USDC' }];
 
-      const promise = service.executeStealthBatch(transactions);
-      vi.advanceTimersByTime(2000);
-      const { results } = await promise;
+      const { results } = await service.executeStealthBatch(transactions);
 
       expect(results[0].recipient).toBe('Charlie');
       expect(results[0].amount).toBe('3800 USDC');
       expect(typeof results[0].stealthAddress).toBe('string');
       expect(results[0].stealthAddress.length).toBe(44);
-    });
+    }, 10000);
 
     it('txHash contains only base58 characters', async () => {
-      const promise = service.executeStealthBatch([{ recipient: 'X', amount: '1' }]);
-      vi.advanceTimersByTime(2000);
-      const { txHash } = await promise;
+      const { txHash } = await service.executeStealthBatch([{ recipient: 'X', amount: '1' }]);
 
       expect(txHash).toMatch(/^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$/);
-    });
+    }, 10000);
 
     it('handles an empty transaction list', async () => {
-      const promise = service.executeStealthBatch([]);
-      vi.advanceTimersByTime(2000);
-      const { txHash, results } = await promise;
+      const { txHash, results } = await service.executeStealthBatch([]);
 
       expect(typeof txHash).toBe('string');
       expect(results).toHaveLength(0);
-    });
+    }, 10000);
   });
 
-  describe('generateViewingKey()', () => {
+  describe('generateViewingKey() — demo mode', () => {
     it('returns a string prefixed with cloak_vk_', async () => {
-      const promise = service.generateViewingKey();
-      vi.advanceTimersByTime(1000);
-      const key = await promise;
+      const key = await service.generateViewingKey();
 
       expect(key).toMatch(/^cloak_vk_/);
-    });
+    }, 10000);
 
     it('the suffix is 32 base58 characters', async () => {
-      const promise = service.generateViewingKey();
-      vi.advanceTimersByTime(1000);
-      const key = await promise;
+      const key = await service.generateViewingKey();
 
       const suffix = key.replace('cloak_vk_', '');
       expect(suffix).toHaveLength(32);
       expect(suffix).toMatch(/^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$/);
-    });
+    }, 10000);
 
     it('generates unique keys on successive calls', async () => {
-      const p1 = service.generateViewingKey();
-      vi.advanceTimersByTime(1000);
-      const key1 = await p1;
-
-      const p2 = service.generateViewingKey();
-      vi.advanceTimersByTime(1000);
-      const key2 = await p2;
+      const key1 = await service.generateViewingKey();
+      const key2 = await service.generateViewingKey();
 
       expect(key1).not.toBe(key2);
+    }, 15000);
+  });
+
+  describe('scanHistory() — demo mode', () => {
+    it('returns null in demo mode', async () => {
+      const result = await service.scanHistory();
+      expect(result).toBeNull();
+    }, 10000);
+  });
+
+  describe('static properties', () => {
+    it('exposes PROGRAM_ID', () => {
+      expect(CloakService.PROGRAM_ID.toBase58()).toBe('zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW');
     });
   });
 

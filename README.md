@@ -52,8 +52,8 @@ The crypto payroll market requires confidentiality, yet there are few privacy-pr
 | **Frontend** | Next.js 16 (App Router), React 19 |
 | **Styling** | Tailwind CSS v4 |
 | **Animation** | Framer Motion, Canvas Particles, ScrambleText |
-| **Privacy SDK** | Cloak SDK (Solana stealth addresses) |
-| **Blockchain** | Solana Devnet |
+| **Privacy SDK** | [`@cloak.dev/sdk`](https://docs.cloak.ag/sdk/introduction) v0.1.6 (Solana UTXO shielded pool) |
+| **Blockchain** | Solana Mainnet (Program: `zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW`) |
 | **Testing** | Vitest + Testing Library |
 
 > 📐 **[Full architecture deep-dive →](docs/ARCHITECTURE.md)** — Detailed system diagrams, data flows, and tech stack breakdowns.
@@ -72,13 +72,38 @@ npm install
 
 # Configure environment
 cp .env.example .env.local
-# Add your required keys
+# Optional: Set KEYPAIR_PATH for live on-chain mode
+# Without it, the app runs in demo mode (simulated stealth addresses)
 
 # Run
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) — the dashboard loads with the full animation suite.
+
+### Live Mode Setup (Optional)
+
+By default, Ghopay runs in **demo mode** — no keypair or SOL needed. To enable real on-chain stealth transfers via the Cloak SDK:
+
+```bash
+# 1. Install Solana CLI (if not already installed)
+sh -c "$(curl -sSfL https://release.anza.xyz/stable/install)"
+
+# 2. Generate a keypair
+solana-keygen new --outfile ~/.config/solana/ghopay-keypair.json
+
+# 3. Check your public address
+solana address -k ~/.config/solana/ghopay-keypair.json
+
+# 4. Fund the keypair with SOL
+#    Devnet: solana airdrop 2 <ADDRESS> --url devnet
+#    Mainnet: transfer SOL from an exchange or wallet
+
+# 5. Set in .env.local (use absolute path)
+echo "KEYPAIR_PATH=/Users/$(whoami)/.config/solana/ghopay-keypair.json" >> .env.local
+```
+
+> **⚠️ Security:** Never commit your keypair file or share it. The `.gitignore` already excludes `*.json` keypair files.
 
 ### Testing
 
@@ -126,7 +151,7 @@ src/
 │   ├── TechStack.tsx         # tech badges
 │   └── WowEffects.tsx        # ScrambleText + ParticleBackground
 └── lib/
-    └── cloak.ts              # CloakService (Solana SDK wrapper)
+    └── cloak.ts              # CloakService (@cloak.dev/sdk UTXO wrapper)
 ```
 
 ---
@@ -158,9 +183,22 @@ src/
 
 | Threat | Mitigation |
 |--------|------------|
-| Public Salary Exposure | Cloak SDK stealth address generation for all payees |
-| Audit Friction | Scoped Viewing Keys (`cloak_vk_...`) for HR and regulators |
-| Linkability | Unique stealth addresses per epoch/payment |
+| Public Salary Exposure | Cloak UTXO shielded pool — `transact()` → `fullWithdraw()` per payee |
+| Audit Friction | Viewing keys via `getNkFromUtxoPrivateKey()` + `scanTransactions()` for HR/regulators |
+| Linkability | Fresh `generateUtxoKeypair()` per payment — unique stealth addresses each epoch |
+
+### Cloak SDK Integration Depth
+
+| SDK Capability | Usage in Ghopay |
+|---|---|
+| **Private transfers** | Each payroll payout routes through the shielded pool via `transact()` + `fullWithdraw()` |
+| **Batch disbursement** | Sequential shielded transfers for N employees in a single payroll run |
+| **Stealth addresses** | Each employee receives to a fresh `Keypair.generate()` stealth address |
+| **Viewing keys** | `getNkFromUtxoPrivateKey()` derives auditor viewing keys; `scanTransactions()` + `toComplianceReport()` for compliance |
+
+> **Program ID:** `zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW`
+> **Relay:** `https://api.cloak.ag`
+> **SDK:** `@cloak.dev/sdk@0.1.6`
 
 ---
 
