@@ -134,9 +134,12 @@ describe('ParticleBackground', () => {
       configurable: true,
     });
     
-    // Set window size large to force dist >= 150
+    // Set window size large to force dist >= 150 initially, but then we'll mock random to force them close
     window.innerWidth = 5000;
     window.innerHeight = 5000;
+
+    // Force particles to spawn close to each other
+    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5);
 
     const { unmount } = render(<ParticleBackground />);
     
@@ -146,6 +149,8 @@ describe('ParticleBackground', () => {
     if (frameCb) {
       (frameCb as FrameRequestCallback)(performance.now());
     }
+
+    randomSpy.mockRestore();
 
     expect(clearRectMock).toHaveBeenCalled();
     expect(arcMock).toHaveBeenCalled();

@@ -13,6 +13,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ghopay-sigma.vercel.app"),
   title: "Ghopay | Cloak SDK",
   description: "Private batch payroll via Cloak SDK",
 };
