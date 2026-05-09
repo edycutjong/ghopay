@@ -1,90 +1,88 @@
 <div align="center">
 
-# Ghopay - Ghost Payroll on Solana
-**Private batch payroll for DAOs — powered by Cloak SDK on Solana.**
+# 👻 Ghopay — Ghost Payroll on Solana
+
+> **Private batch payroll for DAOs.** Institutional-grade payroll protocol using Cloak SDK for stealth addresses and batch transfers on Solana. Ensure team privacy without losing treasury auditability.
 
 <img src="docs/readme-hero.png" alt="Ghopay Hero Image" width="100%">
 
 <br/>
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://ghopay.edycu.dev/)
-[![Pitch Deck](https://img.shields.io/badge/Pitch-Deck-f59e0b.svg)](https://ghopay.edycu.dev/pitch)
+[![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-06b6d4?style=for-the-badge)](https://ghopay.edycu.dev/)
+[![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-f59e0b?style=for-the-badge)](https://ghopay.edycu.dev/pitch)
+[![Tests Passing](https://img.shields.io/badge/🧪_Tests-76_Passing-22c55e?style=for-the-badge)](#testing)
+[![Built for Frontier](https://img.shields.io/badge/Colosseum-Frontier_Hackathon-8b5cf6?style=for-the-badge)](https://superteam.fun/earn/listing/cloak-track)
 
 <br/>
 
-[![Tests](https://img.shields.io/badge/tests-67%20passing-brightgreen.svg)](#testing)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
-[![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF.svg)](https://solana.com)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js&style=for-the-badge)](https://nextjs.org)
+[![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF?logo=solana&style=for-the-badge)](https://solana.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&style=for-the-badge)](https://typescriptlang.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-cyan?style=for-the-badge)](LICENSE)
 
 </div>
 
 ---
 
-## The Problem
+## 🎯 Problem
 
-Crypto payroll is fully public. When a DAO paid 47 contributors on-chain, 12 received targeted phishing emails within 24 hours — each referencing the exact salary amount visible on the explorer.
+Crypto payroll is fully public. Large-scale DAO payouts are fundamentally broken for individual contributors:
 
-Ghopay solves this with **stealth addresses**: individual salary amounts are invisible on public block explorers, while the treasury remains auditable via **Viewing Keys** issued to HR and compliance officers.
+- **Targeted Phishing** — When a DAO paid 47 contributors on-chain, 12 received targeted phishing emails within 24 hours — each referencing the exact salary amount visible on the explorer.
+- **Identity Exposure** — On-chain analysis links wallets to real identities, compromising contributor safety and negotiating leverage.
+- **Compliance Friction** — DAOs need transparent treasuries, but individuals need financial privacy.
 
----
+The crypto payroll market requires confidentiality, yet there are few privacy-preserving, non-custodial batch transfer protocols on Solana.
 
-## How It Works
+## 💡 Solution
 
-```
-Treasury Wallet
-      │
-      ▼  executeStealthBatch()
- Cloak SDK ──► generates a unique stealth address per employee
-      │
-      ├──► Alice  →  stealth_addr_A  (5,000 USDC hidden)
-      ├──► Bob    →  stealth_addr_B  (4,500 USDC hidden)
-      └──► Charlie→  stealth_addr_C  (3,800 USDC hidden)
+**Ghopay** provides a private batch payroll system using stealth addresses:
 
-HR / Auditor
-      │
-      ▼  generateViewingKey()
- cloak_vk_<base58> ──► decrypts full payroll for compliance review
-```
-
-No individual salary is visible on-chain. The treasury debit is public, the per-employee amounts are not.
+1. 💸 **Treasury executes batch** — Sends payroll to N employees in a single transaction via Cloak SDK.
+2. 👻 **Stealth address generation** — Each employee receives funds in a unique, untraceable stealth address.
+3. 🛡️ **Public treasury, private salaries** — No individual salary is visible on-chain. The treasury debit is public, but the per-employee amounts and destinations are hidden.
+4. 👁️ **Auditable compliance** — HR/Auditors can use a **Viewing Key** to decrypt the full payroll for compliance reviews without exposing data publicly.
 
 ---
 
-## Features
+## 🏗️ Architecture & Tech Stack
 
-| Feature | Description |
+| Layer | Technology |
 |---|---|
-| **Stealth batch transfers** | Send to N employees in a single transaction |
-| **Viewing Keys** | Scoped disclosure for HR/auditors without exposing data publicly |
-| **Animated UI** | ScrambleText reveals stealth addresses as they are assigned |
-| **Particle background** | Canvas-based visual indicating network activity |
-| **Health endpoint** | `GET /api/health` for uptime monitoring |
+| **Frontend** | Next.js 16 (App Router), React 19 |
+| **Styling** | Tailwind CSS v4 |
+| **Animation** | Framer Motion, Canvas Particles, ScrambleText |
+| **Privacy SDK** | Cloak SDK (Solana stealth addresses) |
+| **Blockchain** | Solana Devnet |
+| **Testing** | Vitest + Testing Library |
+
+> 📐 **[Full architecture deep-dive →](docs/ARCHITECTURE.md)** — Detailed system diagrams, data flows, and tech stack breakdowns.
 
 ---
 
-## Architecture
-
-Please refer to the formal [Technical Architecture](./docs/ARCHITECTURE.md) document for detailed system diagrams, data flows, and tech stack breakdowns.
-
----
-
-## Run Locally
+## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/edycutjong/frontier-cloak.git
-cd frontier-cloak
+# Clone
+git clone https://github.com/edycutjong/ghopay.git
+cd ghopay
+
+# Install
 npm install
-cp .env.example .env.local   # add your keys
+
+# Configure environment
+cp .env.example .env.local
+# Add your required keys
+
+# Run
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) — the dashboard loads with the full animation suite.
 
----
+### Testing
 
-## Testing
-
-67 unit tests across all components, services, and the health API route.
+76 unit tests across all components, services, and the health API route (100% coverage).
 
 ```bash
 npm test              # watch mode
@@ -92,19 +90,25 @@ npm run test:coverage # single run with coverage report
 npm run ci            # typecheck + lint + coverage (CI gate)
 ```
 
-Test files live alongside source files (`*.test.ts` / `*.test.tsx`).
+---
 
-Coverage spans:
+## 📱 User Flow
 
-- `src/lib/cloak.ts` — CloakService: init, executeStealthBatch, generateViewingKey
-- `src/app/api/health/route.ts` — response shape and field types
-- `src/components/` — all seven UI components
-- `src/app/page.tsx` — dashboard navigation flow
-- `src/app/about/page.tsx` — static content
+### 1. Landing Page
+Premium landing screen with particle background canvas and ScrambleText animations, highlighting the stealth payroll value proposition.
+
+### 2. HR Dashboard
+Execute stealth batch transfers for employees. Stealth addresses are revealed dynamically as they are assigned.
+
+### 3. Payroll Actions & Audit
+Generate scoped Viewing Keys for auditors, ensuring full compliance disclosure without public data leakage.
+
+### 4. System Status
+Real-time monitoring via the `/api/health` endpoint integrated directly into the dashboard header.
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
 ```
 src/
@@ -127,6 +131,46 @@ src/
 
 ---
 
-## Hackathon
+## 🎨 Design System
 
-Built for **Colosseum Frontier Hackathon 2026** — solo submission.
+| Token | Value | Usage |
+|-------|-------|-------|
+| Background | `#0f172a` | App background (Slate 900) |
+| Surface | `#1e293b` | Cards, panels (Slate 800) |
+| Primary | `#06b6d4` | Cloak accent (Cyan 500) |
+| Success | `#22c55e` | Verified/completed states (Green 500) |
+| Font Brand | System Default | Headlines, protocol name |
+| Font Body | System Default | Body text |
+| Font Mono | System Mono | Data, addresses, terminal |
+
+---
+
+## 🏆 Sponsor Tracks
+
+| Track | Sponsor | Prize |
+|-------|---------|-------|
+| Privacy & Stealth | Cloak | $10,000 |
+| General Track | 100xDevs | $10,000 |
+
+---
+
+## 🛡️ Privacy Architecture
+
+| Threat | Mitigation |
+|--------|------------|
+| Public Salary Exposure | Cloak SDK stealth address generation for all payees |
+| Audit Friction | Scoped Viewing Keys (`cloak_vk_...`) for HR and regulators |
+| Linkability | Unique stealth addresses per epoch/payment |
+
+---
+
+## 📄 License
+
+[MIT](LICENSE)
+
+---
+
+<p align="center">
+  <strong>Built for the <a href="https://www.colosseum.org/">Colosseum Frontier Hackathon</a></strong><br/>
+  <sub>by <a href="https://x.com/edycutjong">@edycutjong</a></sub>
+</p>
