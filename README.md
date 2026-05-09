@@ -1,13 +1,17 @@
 <div align="center">
 
 # Ghopay - Ghost Payroll on Solana
-
-<img src="docs/readme-hero.png" alt="Ghopay Hero Image" width="800">
-
 **Private batch payroll for DAOs — powered by Cloak SDK on Solana.**
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://cloak.vercel.app)
-[![Pitch Deck](https://img.shields.io/badge/Pitch-Deck-f59e0b.svg)](public/pitch/index.html)
+<img src="docs/readme-hero.png" alt="Ghopay Hero Image" width="100%">
+
+<br/>
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://ghopay.edycu.dev/)
+[![Pitch Deck](https://img.shields.io/badge/Pitch-Deck-f59e0b.svg)](https://ghopay.edycu.dev/pitch)
+
+<br/>
+
 [![Tests](https://img.shields.io/badge/tests-67%20passing-brightgreen.svg)](#testing)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
 [![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF.svg)](https://solana.com)
@@ -60,35 +64,7 @@ No individual salary is visible on-chain. The treasury debit is public, the per-
 
 ## Architecture
 
-```mermaid
-graph TB
-    subgraph Frontend["Next.js 16 App Router"]
-        A[HeroLanding] -->|onEnter| B[HR Dashboard]
-        B --> C[EmployeeTable]
-        B --> D[PayrollActions]
-        D -->|executeStealthBatch| E[CloakService]
-        D -->|generateViewingKey| E
-    end
-
-    subgraph Lib["src/lib"]
-        E -->|mock SDK| F[base58 address gen]
-    end
-
-    subgraph API["API Routes"]
-        G[GET /api/health]
-    end
-```
-
-**Tech stack:**
-
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 16, React 19 |
-| Styling | Tailwind CSS v4 |
-| Animation | Framer Motion, canvas particles |
-| Privacy SDK | Cloak SDK (Solana stealth addresses) |
-| Testing | Vitest + Testing Library |
-| Language | TypeScript |
+Please refer to the formal [Technical Architecture](./docs/ARCHITECTURE.md) document for detailed system diagrams, data flows, and tech stack breakdowns.
 
 ---
 
