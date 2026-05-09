@@ -138,8 +138,12 @@ describe('ParticleBackground', () => {
     window.innerWidth = 5000;
     window.innerHeight = 5000;
 
-    // Force particles to spawn close to each other
-    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5);
+    // Force particles to spawn at various distances to cover both dist < 150 and dist >= 150
+    let randCount = 0;
+    const randomSpy = vi.spyOn(Math, 'random').mockImplementation(() => {
+      randCount++;
+      return (randCount % 2) === 0 ? 0.1 : 0.9;
+    });
 
     const { unmount } = render(<ParticleBackground />);
     

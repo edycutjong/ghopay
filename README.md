@@ -7,6 +7,7 @@
 **Private batch payroll for DAOs — powered by Cloak SDK on Solana.**
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen.svg)](https://cloak.vercel.app)
+[![Pitch Deck](https://img.shields.io/badge/Pitch-Deck-f59e0b.svg)](public/pitch/index.html)
 [![Tests](https://img.shields.io/badge/tests-67%20passing-brightgreen.svg)](#testing)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org)
 [![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF.svg)](https://solana.com)
