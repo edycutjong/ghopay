@@ -97,12 +97,6 @@ describe('ParticleBackground', () => {
       set strokeStyle(val: string) { },
     };
 
-    const canvasMock = {
-      getContext: vi.fn(() => mockContext),
-      width: 0,
-      height: 0,
-    };
-
 
     let frameCb: FrameRequestCallback | null = null;
     vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => {
@@ -119,9 +113,19 @@ describe('ParticleBackground', () => {
       configurable: true,
     });
     
+    // Actually render so it hits the ctx === null branch
+    const { unmount: unmountCtxNull } = render(<ParticleBackground />);
+    unmountCtxNull();
+
     // Test early return when canvas is null
-    vi.spyOn(React, 'useRef').mockReturnValue({ current: null });
-    render(<ParticleBackground />);
+    const mockRef = {};
+    Object.defineProperty(mockRef, 'current', {
+      get: () => null,
+      set: () => {}
+    });
+    vi.spyOn(React, 'useRef').mockReturnValue(mockRef as { current: null });
+    const { unmount: unmountCanvasNull } = render(<ParticleBackground />);
+    unmountCanvasNull();
     vi.spyOn(React, 'useRef').mockRestore();
     
     const getContextSpy = vi.fn(() => mockContext as unknown as CanvasRenderingContext2D);

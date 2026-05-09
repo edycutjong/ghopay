@@ -45,6 +45,21 @@ describe('CloakService', () => {
       (globalThis as unknown as Record<string, unknown>).window = originalWindow;
     });
 
+    it('handles globalThis.window being undefined', () => {
+      const originalWindow = globalThis.window;
+      Object.defineProperty(globalThis, 'window', {
+        value: undefined,
+        configurable: true
+      });
+      
+      expect(() => service.init()).not.toThrow();
+      
+      Object.defineProperty(globalThis, 'window', {
+        value: originalWindow,
+        configurable: true
+      });
+    });
+
 
     it('catches and logs a warning if accessing window throws', () => {
       const originalWindowDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'window');

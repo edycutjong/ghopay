@@ -1,6 +1,6 @@
 <div align="center">
 
-# Ghopay
+# Ghopay - Ghost Payroll on Solana
 
 <img src="docs/readme-hero.png" alt="Ghopay Hero Image" width="800">
 

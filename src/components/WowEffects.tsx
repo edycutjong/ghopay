@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 /**
  * ScrambleText Component
@@ -53,7 +53,7 @@ export function ScrambleText({ text, trigger, duration = 1500, className = "" }:
  * Renders floating particles with connected lines on a canvas.
  */
 export function ParticleBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;

@@ -16,8 +16,7 @@ export default function Home() {
 
   const [isExecuting, setIsExecuting] = useState(false);
 
-  const handleBatchSuccess = (results: { stealthAddress: string }[], txHash: string) => {
-    console.log("Batch executed:", txHash);
+  const handleBatchSuccess = (results: { stealthAddress: string }[]) => {
     setEmployees(prev => prev.map((emp, idx) => ({
       ...emp,
       status: 'Executed (Stealth)',
