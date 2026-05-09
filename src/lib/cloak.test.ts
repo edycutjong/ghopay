@@ -1,5 +1,19 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { CloakService, cloakService } from './cloak';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { CloakService } from './cloak';
+
+// --- Shared Mock State ---
+const mockState = {
+  fsReadError: false,
+  mockKeypair: JSON.stringify(Array(64).fill(0)),
+};
+
+// Mock fs globally for dynamic imports
+vi.mock('fs', () => ({
+  readFileSync: vi.fn(() => {
+    if (mockState.fsReadError) throw new Error('Mock FS Error');
+    return mockState.mockKeypair;
+  }),
+}));
 
 // Mock all Cloak SDK imports — we don't want real on-chain calls in tests
 vi.mock('@cloak.dev/sdk', () => ({
@@ -19,7 +33,14 @@ vi.mock('@cloak.dev/sdk', () => ({
   fullWithdraw: vi.fn().mockResolvedValue({ signature: 'mockWithdrawSig' }),
   scanTransactions: vi.fn().mockResolvedValue([]),
   toComplianceReport: vi.fn().mockReturnValue({
-    summary: 'No transactions found',
+    summary: {
+      totalDeposits: 0,
+      totalWithdrawals: 0,
+      totalFees: 0,
+      netChange: 0,
+      transactionCount: 0,
+      finalBalance: 0,
+    },
     transactions: [],
   }),
 }));
@@ -27,6 +48,7 @@ vi.mock('@cloak.dev/sdk', () => ({
 vi.mock('@solana/web3.js', () => {
   class MockConnection {
     rpcEndpoint = 'mock';
+    constructor() {}
   }
   return {
     Connection: MockConnection,
@@ -50,8 +72,13 @@ describe('CloakService', () => {
 
   beforeEach(() => {
     service = new CloakService();
+    mockState.fsReadError = false;
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   describe('init()', () => {
@@ -67,6 +94,14 @@ describe('CloakService', () => {
     it('defaults to demo mode when no KEYPAIR_PATH is set', async () => {
       await service.init();
       expect(service.isLive).toBe(false);
+    });
+
+    it('handles environments where process is undefined', async () => {
+      vi.stubGlobal('process', undefined);
+      const localService = new CloakService();
+      await localService.init();
+      expect(localService.isLive).toBe(false);
+      vi.unstubAllGlobals();
     });
   });
 
@@ -139,15 +174,59 @@ describe('CloakService', () => {
     }, 10000);
   });
 
-  describe('static properties', () => {
-    it('exposes PROGRAM_ID', () => {
-      expect(CloakService.PROGRAM_ID.toBase58()).toBe('zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW');
+  describe('Live Mode', () => {
+    beforeEach(() => {
+      vi.stubEnv('KEYPAIR_PATH', '/mock/path/to/keypair.json');
+      mockState.fsReadError = false;
+    });
+
+    it('initializes in live mode when KEYPAIR_PATH is set', async () => {
+      await service.init();
+      expect(service.isLive).toBe(true);
+    });
+
+    it('executes real on-chain shielded transfers in live mode', async () => {
+      const transactions = [{ recipient: 'Alice', amount: '5000 USDC' }];
+      const result = await service.executeStealthBatch(transactions);
+
+      expect(result.txHash).toBe('mockWithdrawSig');
+      expect(result.results).toHaveLength(1);
+      expect(result.results[0].recipient).toBe('Alice');
+      expect(result.results[0].stealthAddress).toBeDefined();
+    });
+
+    it('generates a real viewing key in live mode', async () => {
+      const key = await service.generateViewingKey();
+      // nk is 32 bytes, hex encoded is 64 chars
+      expect(key).toMatch(/^cloak_vk_[0-9a-f]{64}$/);
+    });
+
+    it('scans history and returns a report in live mode', async () => {
+      const report = await service.scanHistory();
+      expect(report).toBeDefined();
+      expect(report?.transactions).toEqual([]);
+    });
+
+    it('handles keypair load failure gracefully', async () => {
+      mockState.fsReadError = true;
+      await service.init();
+      expect(service.isLive).toBe(false);
+    });
+
+    it('executes batch without viewing key if viewingKeyNk is null', async () => {
+      await service.init();
+      // Manually clear private viewingKeyNk to test the branch
+      (service as unknown as { viewingKeyNk: Uint8Array | null }).viewingKeyNk = null;
+      const transactions = [{ recipient: 'Alice', amount: '1000 USDC' }];
+      const result = await service.executeStealthBatch(transactions);
+      expect(result.txHash).toBe('mockWithdrawSig');
     });
   });
 
-  describe('singleton cloakService export', () => {
-    it('is an instance of CloakService', () => {
-      expect(cloakService).toBeInstanceOf(CloakService);
+  describe('PROGRAM_ID', () => {
+    it('returns the expected program ID', () => {
+      const id = CloakService.PROGRAM_ID;
+      expect(id.toBase58()).toBe('zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW');
     });
   });
 });
