@@ -10,7 +10,6 @@
 
 [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-06b6d4?style=for-the-badge)](https://ghopay.edycu.dev/)
 [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-f59e0b?style=for-the-badge)](https://ghopay.edycu.dev/pitch)
-[![Tests Passing](https://img.shields.io/badge/🧪_Tests-76_Passing-22c55e?style=for-the-badge)](#testing)
 [![Built for Frontier](https://img.shields.io/badge/Colosseum-Frontier_Hackathon-8b5cf6?style=for-the-badge)](https://superteam.fun/earn/listing/cloak-track)
 
 <br/>
@@ -19,6 +18,7 @@
 [![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF?logo=solana&style=for-the-badge)](https://solana.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&style=for-the-badge)](https://typescriptlang.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-cyan?style=for-the-badge)](LICENSE)
+[![Tests Passing](https://img.shields.io/badge/🧪_Tests-76_Passing-22c55e?style=for-the-badge)](#testing)
 
 </div>
 
