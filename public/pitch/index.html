@@ -51,7 +51,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 3rem 2rem;
+      padding: 5rem 2rem;
       scroll-snap-align: start;
       position: relative;
       overflow: hidden;
@@ -344,10 +344,12 @@
     }
 
     @media (max-width: 640px) {
-      .slide { padding: 2rem 1.25rem; }
+      .slide { padding: 4rem 1.25rem; }
       .flow { flex-direction: column; }
       .flow-arrow { transform: rotate(90deg); }
-      .nav-dots { display: none; }
+      .nav-dots, .nav-hint { display: none; }
+      .slide-number { bottom: 1rem; right: 1rem; }
+      .card-grid, .stat-grid { grid-template-columns: 1fr !important; }
     }
   </style>
 </head>
@@ -435,7 +437,7 @@
       <h2>The <span class="highlight-purple">gold standard</span> for Solana privacy</h2>
       <p class="tagline">Ghopay leverages the Cloak SDK's UTXO shielded pool architecture for maximum privacy without losing auditability.</p>
       <div class="divider"></div>
-      <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="card-grid">
         <div class="card">
           <h4 style="color: var(--cyan);">Stealth Addresses</h4>
           <p>Every payout generates a fresh `Keypair.generate()` destination. Wallet linkage becomes cryptographically impossible.</p>
@@ -455,16 +457,18 @@
     <div class="content">
       <h3>Architecture</h3>
       <h2>Production-grade. <span class="highlight">Built for scale.</span></h2>
-      <table class="tech-table">
-        <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
-        <tbody>
-          <tr><td>Frontend</td><td>Next.js 16 (App Router), React 19, Tailwind CSS v4</td></tr>
-          <tr><td>Animation</td><td>Framer Motion, Canvas Particles, ScrambleText</td></tr>
-          <tr><td>Privacy SDK</td><td>@cloak.dev/sdk v0.1.6 (Solana UTXO shielded pool)</td></tr>
-          <tr><td>Blockchain</td><td>Solana Mainnet (Program: zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW)</td></tr>
-          <tr><td>Testing</td><td>Vitest + Testing Library</td></tr>
-        </tbody>
-      </table>
+      <div style="width: 100%; overflow-x: auto; padding-bottom: 0.5rem; margin-top: 1.5rem;">
+        <table class="tech-table" style="margin-top: 0;">
+          <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
+          <tbody>
+            <tr><td>Frontend</td><td>Next.js 16 (App Router), React 19, Tailwind CSS v4</td></tr>
+            <tr><td>Animation</td><td>Framer Motion, Canvas Particles, ScrambleText</td></tr>
+            <tr><td>Privacy SDK</td><td>@cloak.dev/sdk v0.1.6 (Solana UTXO shielded pool)</td></tr>
+            <tr><td>Blockchain</td><td>Solana Mainnet (Program: zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW)</td></tr>
+            <tr><td>Testing</td><td>Vitest + Testing Library</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <span class="slide-number">5 / 8</span>
   </section>

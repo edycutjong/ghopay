@@ -14,11 +14,11 @@
 
 <br/>
 
-[![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js&style=flat-square)](https://nextjs.org)
-[![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF?logo=solana&style=flat-square)](https://solana.com)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&style=flat-square)](https://typescriptlang.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-cyan?style=flat-square)](LICENSE)
-[![Tests Passing](https://img.shields.io/badge/🧪_Tests-76_Passing-22c55e?style=flat-square)](#testing)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js&style=flat)](https://nextjs.org)
+[![Solana](https://img.shields.io/badge/Solana-Devnet-9945FF?logo=solana&style=flat)](https://solana.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&style=flat)](https://typescriptlang.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-cyan?style=flat)](LICENSE)
+[![Ghopay CI](https://github.com/edycutjong/ghopay/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/ghopay/actions/workflows/ci.yml)
 
 </div>
 
