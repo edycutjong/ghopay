@@ -1,678 +1,146 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ghopay 👻 — Pitch Deck</title>
-  <meta name="description" content="Private batch payroll for DAOs. Institutional-grade payroll protocol using Cloak SDK for stealth addresses.">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Ghopay — Ghost Payroll on Solana | Pitch Deck</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --border: rgba(255,255,255,0.06);
-      --text: #f1f5f9;
-      --text-muted: #94a3b8;
-      --cyan: #06b6d4;
-      --purple: #8b5cf6;
-      --green: #22c55e;
-      --red: #ef4444;
-      --amber: #f59e0b;
-    }
-
-    html { scroll-behavior: smooth; scroll-snap-type: y mandatory; overflow-y: scroll; }
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
-
-    /* Fullscreen particle canvas */
-    #particles {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    /* Dot grid overlay */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 32px 32px;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .slide {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 5rem 2rem;
-      scroll-snap-align: start;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Animated gradient orbs per slide */
-    .slide .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.35;
-      pointer-events: none;
-      animation: orbFloat 12s ease-in-out infinite;
-    }
-    .slide .orb-1 {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(6,182,212,0.4), transparent 70%);
-      top: -15%; right: -10%;
-      animation-delay: 0s;
-    }
-    .slide .orb-2 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(139,92,246,0.35), transparent 70%);
-      bottom: -10%; left: -8%;
-      animation-delay: -4s;
-    }
-    .slide .orb-3 {
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(34,197,94,0.25), transparent 70%);
-      top: 40%; left: 50%;
-      animation-delay: -8s;
-    }
-    @keyframes orbFloat {
-      0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(30px, -20px) scale(1.08); }
-      66% { transform: translate(-20px, 15px) scale(0.95); }
-    }
-
-    /* Vignette edge glow */
-    .slide::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 0%, rgba(6,182,212,0.06) 0%, transparent 55%);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .slide::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(6,182,212,0.15), transparent);
-      z-index: 1;
-    }
-
-    /* Scroll-triggered entrance animations */
-    .slide .content {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
-    }
-    .slide.visible .content {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .content {
-      max-width: 900px;
-      width: 100%;
-      z-index: 2;
-      position: relative;
-    }
-
-    .slide-number {
-      position: absolute;
-      bottom: 1.5rem;
-      right: 2rem;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      opacity: 0.5;
-    }
-
-    h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 900;
-      line-height: 1.1;
-      background: linear-gradient(135deg, var(--text) 40%, var(--cyan) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem; }
-    h3 { font-size: 1.25rem; font-weight: 600; color: var(--cyan); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; text-shadow: 0 0 16px rgba(6,182,212,0.3); }
-
-    .tagline { font-size: clamp(1rem, 2vw, 1.4rem); color: var(--text-muted); line-height: 1.6; max-width: 700px; }
-    .highlight { color: var(--cyan); }
-    .highlight-purple { color: var(--purple); }
-    .highlight-green { color: var(--green); }
-    .highlight-red { color: var(--red); }
-
-    .badge {
-      display: inline-block;
-      padding: 0.35rem 0.9rem;
-      border-radius: 100px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-    .badge-cyan { background: rgba(6,182,212,0.15); color: var(--cyan); border: 1px solid rgba(6,182,212,0.3); }
-    .badge-purple { background: rgba(139,92,246,0.15); color: var(--purple); border: 1px solid rgba(139,92,246,0.3); }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.25rem;
-      margin-top: 1.5rem;
-    }
-
-    .card {
-      background: rgba(18,18,26,0.6);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 1.5rem;
-      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s, box-shadow 0.3s;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(6,182,212,0.25);
-      box-shadow: 0 8px 32px rgba(6,182,212,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
-    }
-    .card .icon { margin-bottom: 0.75rem; }
-    .card .icon svg { width: 28px; height: 28px; stroke: var(--cyan); stroke-width: 1.5; fill: none; }
-    .card h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem; }
-    .card p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; }
-
-    .flow {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: 2rem;
-    }
-    .flow-step {
-      background: rgba(18,18,26,0.6);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      text-align: center;
-      flex: 1;
-      min-width: 120px;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .flow-step:hover {
-      border-color: rgba(6,182,212,0.3);
-      box-shadow: 0 0 20px rgba(6,182,212,0.1);
-    }
-    .flow-step .num { color: var(--cyan); font-size: 1.5rem; font-weight: 800; }
-    .flow-step .label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; }
-    .flow-arrow { font-size: 1.5rem; color: var(--text-muted); opacity: 0.4; }
-
-    .tech-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1.5rem;
-    }
-    .tech-table th, .tech-table td {
-      padding: 0.85rem 1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.9rem;
-    }
-    .tech-table th { color: var(--text-muted); font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
-    .tech-table td:first-child { font-weight: 600; color: var(--cyan); }
-
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1.25rem;
-      margin-top: 2rem;
-    }
-    .stat {
-      text-align: center;
-      padding: 1.5rem;
-      background: rgba(18,18,26,0.6);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 16px;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .stat:hover {
-      border-color: rgba(6,182,212,0.3);
-      box-shadow: 0 0 24px rgba(6,182,212,0.1);
-    }
-    .stat .value { font-size: 2.5rem; font-weight: 900; color: var(--cyan); text-shadow: 0 0 20px rgba(6,182,212,0.3); }
-    .stat .label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
-
-    .quote {
-      font-size: clamp(1.3rem, 3vw, 2rem);
-      font-weight: 700;
-      font-style: italic;
-      color: var(--text);
-      line-height: 1.4;
-      max-width: 700px;
-      text-align: center;
-      margin: 0 auto;
-    }
-    .quote::before { content: '"'; color: var(--cyan); }
-    .quote::after { content: '"'; color: var(--cyan); }
-
-    .cta-links {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-    .cta-links a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: transform 0.2s, opacity 0.2s;
-    }
-    .cta-links a:hover { transform: translateY(-1px); opacity: 0.9; }
-    .cta-primary {
-      background: linear-gradient(135deg, var(--cyan), #0891b2);
-      color: var(--bg);
-      box-shadow: 0 0 20px rgba(6,182,212,0.3), 0 4px 12px rgba(6,182,212,0.2);
-    }
-    .cta-primary:hover { box-shadow: 0 0 30px rgba(6,182,212,0.5), 0 4px 16px rgba(6,182,212,0.3); }
-    .cta-secondary {
-      background: rgba(18,18,26,0.6);
-      backdrop-filter: blur(12px);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .cta-secondary:hover { border-color: rgba(255,255,255,0.2); box-shadow: 0 0 16px rgba(255,255,255,0.05); }
-
-    .divider { width: 60px; height: 3px; background: var(--cyan); border-radius: 2px; margin: 1.5rem 0; }
-
-    .built-by {
-      margin-top: 3rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-    .built-by strong { color: var(--text); }
-
-    /* Navigation dots */
-    .nav-dots {
-      position: fixed;
-      right: 1.5rem;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      z-index: 100;
-    }
-    .nav-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .nav-dot.active { background: var(--cyan); transform: scale(1.4); }
-    .nav-dot:hover { background: rgba(255,255,255,0.5); }
-
-    /* Keyboard nav hint */
-    .nav-hint {
-      position: fixed;
-      bottom: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      opacity: 0.4;
-      z-index: 100;
-    }
-
-    @media (max-width: 640px) {
-      .slide { padding: 4rem 1.25rem; }
-      .flow { flex-direction: column; }
-      .flow-arrow { transform: rotate(90deg); }
-      .nav-dots, .nav-hint { display: none; }
-      .slide-number { bottom: 1rem; right: 1rem; }
-      .card-grid, .stat-grid { grid-template-columns: 1fr !important; }
-    }
+    :root{--cyan:#06b6d4;--purple:#a855f7;--green:#22c55e;--red:#ef4444;--emerald:#10b981;--slate-400:#94a3b8;--slate-600:#475569}
+    body{background:#020617}
+    #particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+    .reveal{font-family:'Inter',system-ui,sans-serif;position:relative;z-index:1}
+    .reveal .slide-background{background:transparent!important}
+    .reveal .slides section{background:transparent}
+    .reveal h1,.reveal h2,.reveal h3{text-transform:none;font-family:'Inter',system-ui,sans-serif;font-weight:800;letter-spacing:-0.03em}
+    .brand-gradient{background:linear-gradient(135deg,var(--emerald),var(--cyan),var(--emerald));background-size:200% 200%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gs 4s ease infinite}
+    @keyframes gs{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+    .glow-title{text-shadow:0 0 40px rgba(16,185,129,0.3),0 0 80px rgba(16,185,129,0.1)}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:999px;font-size:.55em;font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:1px solid rgba(16,185,129,0.3);background:rgba(16,185,129,0.08);color:var(--emerald)}
+    .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--emerald);animation:pulse 2s ease-in-out infinite;box-shadow:0 0 8px var(--emerald)}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+    .glass-card{background:rgba(255,255,255,0.03);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;transition:all .4s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden}
+    .glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent)}
+    .glass-card:hover{border-color:rgba(16,185,129,0.25);transform:translateY(-2px);box-shadow:0 8px 32px rgba(16,185,129,0.1)}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:stretch}
+    .metric-value{font-family:'JetBrains Mono',monospace;font-size:3em;font-weight:700;margin:0;line-height:1}
+    .metric-label{font-size:.48em;color:var(--slate-400);text-transform:uppercase;letter-spacing:3px;margin-top:12px;font-weight:600}
+    .icon-ring{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6em;margin-bottom:16px}
+    .icon-ring.emerald{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2)}
+    .icon-ring.cyan{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2)}
+    .icon-ring.purple{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2)}
+    .reveal .problem-list{list-style:none;width:90%;text-align:left}
+    .reveal .problem-list li{padding:16px 20px;margin-bottom:12px;border-radius:12px;background:rgba(239,68,68,0.05);border-left:3px solid var(--red);color:#e2e8f0;font-size:.85em;line-height:1.5}
+    .flow-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+    .flow-node{padding:10px 20px;border-radius:10px;font-size:.6em;font-family:'JetBrains Mono',monospace;font-weight:600}
+    .flow-arrow{color:var(--slate-600);font-size:1.2em}
+    .terminal-block{background:#0a0a0a;border:1px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;text-align:left;font-family:'JetBrains Mono',monospace;font-size:.5em}
+    .terminal-header{display:flex;align-items:center;gap:8px;padding:10px 16px;background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.06)}
+    .terminal-dot{width:10px;height:10px;border-radius:50%}
+    .terminal-body{padding:16px;line-height:1.8}
+    .t-cyan{color:var(--cyan)}.t-green{color:var(--green)}.t-red{color:var(--red)}.t-emerald{color:var(--emerald)}.t-purple{color:var(--purple)}.t-dim{color:var(--slate-600)}
+    .link-card{display:flex;align-items:center;gap:12px;padding:14px 20px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);text-decoration:none;transition:all .3s ease;margin-bottom:10px}
+    .link-card:hover{background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.3);transform:translateX(4px)}
+    .link-card .link-label{font-size:.6em;color:var(--emerald);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+    .link-card .link-url{font-size:.7em;color:#fff;font-family:'JetBrains Mono',monospace}
+    .link-card .link-icon{font-size:1.4em}
   </style>
 </head>
 <body>
+  <canvas id="particle-canvas"></canvas>
+  <div class="reveal">
+    <div class="slides">
 
-  <!-- Particle canvas -->
-  <canvas id="particles"></canvas>
-
-  <!-- Navigation -->
-  <nav class="nav-dots" id="navDots"></nav>
-  <div class="nav-hint">↑↓ or scroll to navigate</div>
-
-  <!-- SLIDE 1: Title -->
-  <section class="slide" id="slide-1">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="content" style="text-align: center;">
-      <span class="badge badge-cyan">Colosseum Frontier Hackathon — Cloak Track</span>
-      <h1 style="margin-top: 1.5rem;">Ghopay 👻</h1>
-      <p class="tagline" style="margin: 1.5rem auto 0;">
-        <span class="highlight">Private batch payroll</span> for DAOs.<br>
-        Ensure team privacy <span class="highlight-green">without losing treasury auditability.</span>
-      </p>
-      <div class="cta-links" style="justify-content: center; margin-top: 2.5rem;">
-        <a href="https://ghopay.edycu.dev" target="_blank" class="cta-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Live Demo</a>
-        <a href="https://github.com/edycutjong/ghopay" target="_blank" class="cta-secondary"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> GitHub</a>
-      </div>
-    </div>
-    <span class="slide-number">1 / 8</span>
-  </section>
-
-  <!-- SLIDE 2: Problem -->
-  <section class="slide" id="slide-2">
-    <div class="orb orb-2" style="top:-10%;right:-5%"></div>
-    <div class="content">
-      <h3>The Problem</h3>
-      <h2>Public crypto payroll is <span class="highlight-red">fundamentally broken</span></h2>
-      <div class="card-grid">
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
-          <h4>Targeted Phishing</h4>
-          <p>When a DAO pays 47 contributors on-chain, 12 receive targeted phishing emails referencing the exact salary amount visible on the explorer.</p>
-        </div>
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></div>
-          <h4>Identity Exposure</h4>
-          <p>On-chain analysis links wallets to real identities, compromising contributor safety and negotiating leverage.</p>
-        </div>
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg></div>
-          <h4>Compliance Friction</h4>
-          <p>DAOs need transparent treasuries, but individuals need financial privacy. Both shouldn't be mutually exclusive.</p>
-        </div>
-      </div>
-    </div>
-    <span class="slide-number">2 / 8</span>
-  </section>
-
-  <!-- SLIDE 3: Solution -->
-  <section class="slide" id="slide-3">
-    <div class="orb orb-1" style="bottom:-15%;left:-5%"></div>
-    <div class="orb orb-3"></div>
-    <div class="content">
-      <h3>The Solution</h3>
-      <h2>Ghopay + Cloak SDK = <span class="highlight">stealth batch transfers</span></h2>
-      <p class="tagline">Execute batch payroll in a single click. Every employee receives funds in a unique, untraceable stealth address. Auditable for compliance via Viewing Keys.</p>
-      <div class="flow">
-        <div class="flow-step"><div class="num">1</div><div class="label">Treasury Executes</div></div>
-        <span class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-        <div class="flow-step"><div class="num">2</div><div class="label">Cloak Shielded Pool</div></div>
-        <span class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-        <div class="flow-step"><div class="num">3</div><div class="label">Stealth Generation</div></div>
-        <span class="flow-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
-        <div class="flow-step"><div class="num">4</div><div class="label">Private Payout</div></div>
-      </div>
-    </div>
-    <span class="slide-number">3 / 8</span>
-  </section>
-
-  <!-- SLIDE 4: Why Cloak -->
-  <section class="slide" id="slide-4">
-    <div class="orb orb-2" style="top:10%;left:-10%"></div>
-    <div class="content">
-      <h3>Why Cloak Privacy SDK</h3>
-      <h2>The <span class="highlight-purple">gold standard</span> for Solana privacy</h2>
-      <p class="tagline">Ghopay leverages the Cloak SDK's UTXO shielded pool architecture for maximum privacy without losing auditability.</p>
-      <div class="divider"></div>
-      <div class="card-grid">
-        <div class="card">
-          <h4 style="color: var(--cyan);">Stealth Addresses</h4>
-          <p>Every payout generates a fresh `Keypair.generate()` destination. Wallet linkage becomes cryptographically impossible.</p>
-        </div>
-        <div class="card" style="border-color: rgba(6,182,212,0.3);">
-          <h4 style="color: var(--green);">Viewing Keys</h4>
-          <p>HR and Auditors can view the full payroll via `getNkFromUtxoPrivateKey()` — ensuring regulatory compliance without public explorer leakage.</p>
-        </div>
-      </div>
-    </div>
-    <span class="slide-number">4 / 8</span>
-  </section>
-
-  <!-- SLIDE 5: Tech Stack -->
-  <section class="slide" id="slide-5">
-    <div class="orb orb-1" style="top:-10%;left:60%"></div>
-    <div class="content">
-      <h3>Architecture</h3>
-      <h2>Production-grade. <span class="highlight">Built for scale.</span></h2>
-      <div style="width: 100%; overflow-x: auto; padding-bottom: 0.5rem; margin-top: 1.5rem;">
-        <table class="tech-table" style="margin-top: 0;">
-          <thead><tr><th>Layer</th><th>Technology</th></tr></thead>
-          <tbody>
-            <tr><td>Frontend</td><td>Next.js 16 (App Router), React 19, Tailwind CSS v4</td></tr>
-            <tr><td>Animation</td><td>Framer Motion, Canvas Particles, ScrambleText</td></tr>
-            <tr><td>Privacy SDK</td><td>@cloak.dev/sdk v0.1.6 (Solana UTXO shielded pool)</td></tr>
-            <tr><td>Blockchain</td><td>Solana Mainnet (Program: zh1eLd6rSphLejbFfJEneUwzHRfMKxgzrgkfwA6qRkW)</td></tr>
-            <tr><td>Testing</td><td>Vitest + Testing Library</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <span class="slide-number">5 / 8</span>
-  </section>
-
-  <!-- SLIDE 6: Key Features -->
-  <section class="slide" id="slide-6">
-    <div class="orb orb-2" style="bottom:-10%;right:-5%"></div>
-    <div class="orb orb-3" style="top:20%;left:-8%"></div>
-    <div class="content">
-      <h3>Features</h3>
-      <h2>Institutional-grade <span class="highlight">privacy</span></h2>
-      <div class="card-grid">
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-          <h4>Private Transfers</h4>
-          <p>Each payroll payout routes through the shielded pool via transact() + fullWithdraw()</p>
-        </div>
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <h4>Batch Disbursement</h4>
-          <p>Sequential shielded transfers for N employees in a single payroll run</p>
-        </div>
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2-9 5 18 4-9h5"/></svg></div>
-          <h4>Real-Time Status</h4>
-          <p>Live health monitoring integrated directly into the dashboard header</p>
-        </div>
-        <div class="card">
-          <div class="icon"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-          <h4>Scoped Compliance</h4>
-          <p>Generate Viewing Keys for auditors, ensuring full disclosure without public data leakage.</p>
-        </div>
-      </div>
-    </div>
-    <span class="slide-number">6 / 8</span>
-  </section>
-
-  <!-- SLIDE 7: Quality -->
-  <section class="slide" id="slide-7">
-    <div class="orb orb-1" style="top:30%;right:-12%"></div>
-    <div class="content" style="text-align: center;">
-      <h3>Code Quality</h3>
-      <h2>Not a prototype. <span class="highlight-green">Production code.</span></h2>
-      <div class="stat-grid">
-        <div class="stat">
-          <div class="value">76</div>
-          <div class="label">Tests Passing</div>
-        </div>
-        <div class="stat">
-          <div class="value" style="color: var(--green);">100%</div>
-          <div class="label">Code Coverage</div>
-        </div>
-        <div class="stat">
-          <div class="value">12</div>
-          <div class="label">Test Files</div>
-        </div>
-        <div class="stat">
-          <div class="value">0</div>
-          <div class="label">Lint Warnings</div>
-        </div>
-      </div>
-      <p style="margin-top: 2rem; color: var(--text-muted); font-size: 0.9rem;">
-        CI pipeline: <code style="color: var(--cyan);">npm run ci</code> → ESLint + TypeScript strict + Vitest coverage
-      </p>
-    </div>
-    <span class="slide-number">7 / 8</span>
-  </section>
-
-  <!-- SLIDE 8: Close -->
-  <section class="slide" id="slide-8">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-    <div class="content" style="text-align: center;">
-      <p class="quote">Privacy isn't about hiding. It's about empowering DAOs with institutional security.</p>
-      <div class="divider" style="margin: 2rem auto;"></div>
-      <h2>Ghopay <span class="highlight"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -3px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></h2>
-      <p class="tagline" style="margin: 0 auto;">Ghost Payroll on Solana.</p>
-      <div class="cta-links" style="justify-content: center; margin-top: 2rem;">
-        <a href="https://ghopay.edycu.dev" target="_blank" class="cta-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg> Try the Live Demo</a>
-        <a href="https://github.com/edycutjong/ghopay" target="_blank" class="cta-secondary"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg> View Source</a>
-      </div>
-      <div class="built-by">
-        <p>Built solo by <strong>Edy Cu Tjong</strong></p>
-        <p style="margin-top: 0.25rem;">
-          <a href="https://x.com/edycutjong" target="_blank" style="color: var(--text-muted); text-decoration: none;">𝕏 @edycutjong</a>
-          &nbsp;·&nbsp;
-          <a href="https://github.com/edycutjong" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub @edycutjong</a>
+      <section>
+        <div class="badge"><span class="dot"></span> Cloak SDK Integration</div>
+        <h1 style="font-size:3.5em;margin-top:24px" class="glow-title"><span class="brand-gradient">Ghopay</span></h1>
+        <p style="color:#cbd5e1;font-size:.95em;max-width:640px;margin:16px auto 0;line-height:1.6">
+          <strong style="color:#fff">Ghost payroll on Solana.</strong> Private batch payroll for DAOs using stealth addresses. Team privacy without losing treasury auditability.
         </p>
-      </div>
+        <p style="color:var(--slate-400);font-size:.65em;margin-top:40px;letter-spacing:2px;text-transform:uppercase">Colosseum Frontier Hackathon 2026</p>
+      </section>
+
+      <section>
+        <h2 style="font-size:2em">The <span style="color:var(--red)">Problem</span></h2>
+        <p style="color:var(--slate-400);font-size:.75em;margin-bottom:28px">DAO payroll is publicly visible on-chain.</p>
+        <ul class="problem-list">
+          <li>👁️ <strong>Salary leaks</strong> — Anyone can see exactly what every contributor earns via block explorer</li>
+          <li>🎯 <strong>Targeted attacks</strong> — High earners become phishing and social engineering targets</li>
+          <li>📊 <strong>Competitive intel</strong> — Rival DAOs can poach top contributors by seeing their comp</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 style="font-size:2em">The <span class="brand-gradient">Solution</span></h2>
+        <p style="color:#cbd5e1;font-size:.75em;margin-bottom:24px">Stealth address payroll. One TX, many recipients, zero public linkage.</p>
+        <div class="grid-3" style="margin-top:20px">
+          <div class="glass-card" style="text-align:left"><div class="icon-ring emerald">👻</div><h3 style="font-size:.9em;color:#fff;margin:0 0 8px">Stealth Addresses</h3><p style="font-size:.55em;color:var(--slate-400);line-height:1.6">Cloak SDK generates unique stealth addresses per payment. No public linkage.</p></div>
+          <div class="glass-card" style="text-align:left"><div class="icon-ring cyan">📦</div><h3 style="font-size:.9em;color:#fff;margin:0 0 8px">Batch Transfers</h3><p style="font-size:.55em;color:var(--slate-400);line-height:1.6">Pay entire team in a single transaction. One click for 50+ payees.</p></div>
+          <div class="glass-card" style="text-align:left"><div class="icon-ring purple">🔍</div><h3 style="font-size:.9em;color:#fff;margin:0 0 8px">Audit Trail</h3><p style="font-size:.55em;color:var(--slate-400);line-height:1.6">Treasury multisig maintains full audit visibility. Privacy for recipients, transparency for governance.</p></div>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="font-size:1.8em">Ghost Payroll Flow</h2>
+        <div class="flow-row" style="margin:30px 0 20px">
+          <div class="flow-node" style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:var(--emerald)">CSV Upload</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node" style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);color:var(--purple)">Stealth Gen</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node" style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.3);color:var(--cyan)">Batch TX</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node" style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:var(--green)">Ghost ✓</div>
+        </div>
+        <div class="terminal-block" style="max-width:680px;margin:0 auto">
+          <div class="terminal-header">
+            <div class="terminal-dot" style="background:#ef4444"></div>
+            <div class="terminal-dot" style="background:#f59e0b"></div>
+            <div class="terminal-dot" style="background:#22c55e"></div>
+            <span style="color:var(--slate-400);margin-left:8px">Ghopay Payroll Engine</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="t-dim">[csv]</span> <span class="t-emerald">📋</span> 12 recipients loaded — total: 45,000 USDC</div>
+            <div><span class="t-dim">[cloak]</span> <span class="t-purple">👻</span> 12 stealth addresses generated via Cloak SDK</div>
+            <div><span class="t-dim">[batch]</span> <span class="t-cyan">⚡</span> Single TX submitted — 12 transfers bundled</div>
+            <div><span class="t-dim">[done]</span> <span class="t-green">✓</span> Payroll complete — explorer shows: "1 TX, 1 recipient"</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="font-size:1.8em">Production Ready</h2>
+        <div class="grid-3" style="margin-top:24px">
+          <div class="glass-card" style="text-align:center"><p class="metric-value" style="color:var(--cyan)">100%</p><p class="metric-label">Test Coverage</p></div>
+          <div class="glass-card" style="text-align:center"><p class="metric-value" style="color:var(--green)">Zero</p><p class="metric-label">Lint Warnings</p></div>
+          <div class="glass-card" style="text-align:center"><p class="metric-value" style="color:var(--emerald)">1 TX</p><p class="metric-label">50+ Payments</p></div>
+        </div>
+        <div class="flow-row" style="margin-top:28px;gap:20px;flex-wrap:wrap">
+          <span class="badge" style="font-size:.45em">Next.js 16</span>
+          <span class="badge" style="font-size:.45em">React 19</span>
+          <span class="badge" style="font-size:.45em">Cloak SDK</span>
+          <span class="badge" style="font-size:.45em">Tailwind v4</span>
+          <span class="badge" style="font-size:.45em">CI/CD</span>
+        </div>
+      </section>
+
+      <section>
+        <h2 style="font-size:2em">Experience <span class="brand-gradient">Ghopay</span></h2>
+        <div style="max-width:420px;margin:32px auto 0">
+          <a href="https://ghopay.edycu.dev" target="_blank" class="link-card"><span class="link-icon">🚀</span><div><div class="link-label">Live Demo</div><div class="link-url">ghopay.edycu.dev</div></div></a>
+          <a href="https://github.com/edycutjong/ghopay" target="_blank" class="link-card"><span class="link-icon">📦</span><div><div class="link-label">Source Code</div><div class="link-url">edycutjong/ghopay</div></div></a>
+        </div>
+        <p style="font-size:.55em;color:var(--slate-600);margin-top:36px;font-style:italic">Private payroll. Public accountability. Ghost protocol.</p>
+      </section>
+
     </div>
-    <span class="slide-number">8 / 8</span>
-  </section>
-
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
   <script>
-    // ── Particle system ──
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let W, H;
-    const particles = [];
-    const PARTICLE_COUNT = 60;
-
-    function resize() {
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    class Particle {
-      constructor() { this.reset(); }
-      reset() {
-        this.x = Math.random() * W;
-        this.y = Math.random() * H;
-        this.r = Math.random() * 1.5 + 0.3;
-        this.vx = (Math.random() - 0.5) * 0.15;
-        this.vy = (Math.random() - 0.5) * 0.15;
-        this.alpha = Math.random() * 0.4 + 0.1;
-        const colors = ['6,182,212', '139,92,246', '34,197,94'];
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > W) this.vx *= -1;
-        if (this.y < 0 || this.y > H) this.vy *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${this.color},${this.alpha})`;
-        ctx.fill();
-      }
-    }
-
-    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
-
-    function drawLines() {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(6,182,212,${0.06 * (1 - dist / 120)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    function animateParticles() {
-      ctx.clearRect(0, 0, W, H);
-      particles.forEach(p => { p.update(); p.draw(); });
-      drawLines();
-      requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
-
-    // ── Navigation dots ──
-    const totalSlides = 8;
-    const dotsContainer = document.getElementById('navDots');
-    for (let i = 1; i <= totalSlides; i++) {
-      const dot = document.createElement('button');
-      dot.className = 'nav-dot' + (i === 1 ? ' active' : '');
-      dot.setAttribute('aria-label', `Slide ${i}`);
-      dot.onclick = () => document.getElementById(`slide-${i}`).scrollIntoView({ behavior: 'smooth' });
-      dotsContainer.appendChild(dot);
-    }
-
-    // ── Scroll observer: active dot + entrance animation ──
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          const slideNum = entry.target.id.split('-')[1];
-          document.querySelectorAll('.nav-dot').forEach((d, i) => {
-            d.classList.toggle('active', i === parseInt(slideNum) - 1);
-          });
-        }
-      });
-    }, { threshold: 0.35 });
-
-    for (let i = 1; i <= totalSlides; i++) {
-      observer.observe(document.getElementById(`slide-${i}`));
-    }
-
-    // ── Keyboard navigation ──
-    document.addEventListener('keydown', (e) => {
-      const active = document.querySelector('.nav-dot.active');
-      const idx = [...document.querySelectorAll('.nav-dot')].indexOf(active);
-      if ((e.key === 'ArrowDown' || e.key === ' ') && idx < totalSlides - 1) {
-        e.preventDefault();
-        document.getElementById(`slide-${idx + 2}`).scrollIntoView({ behavior: 'smooth' });
-      } else if (e.key === 'ArrowUp' && idx > 0) {
-        e.preventDefault();
-        document.getElementById(`slide-${idx}`).scrollIntoView({ behavior: 'smooth' });
-      }
-    });
+    (function(){const c=document.getElementById('particle-canvas'),x=c.getContext('2d');let p=[];const N=75;function r(){c.width=innerWidth;c.height=innerHeight}addEventListener('resize',r);r();class P{constructor(){this.r()}r(){this.x=Math.random()*c.width;this.y=Math.random()*c.height;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.s=Math.random()*1.5+.5;this.o=Math.random()*.5+.1}u(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>c.width)this.vx*=-1;if(this.y<0||this.y>c.height)this.vy*=-1}d(){x.beginPath();x.arc(this.x,this.y,this.s,0,Math.PI*2);x.fillStyle=`rgba(16,185,129,${this.o})`;x.fill()}}for(let i=0;i<N;i++)p.push(new P);function a(){x.clearRect(0,0,c.width,c.height);p.forEach(q=>{q.u();q.d()});for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++){const dx=p[i].x-p[j].x,dy=p[i].y-p[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<150){x.beginPath();x.moveTo(p[i].x,p[i].y);x.lineTo(p[j].x,p[j].y);x.strokeStyle=`rgba(16,185,129,${.06*(1-d/150)})`;x.lineWidth=.5;x.stroke()}}requestAnimationFrame(a)}a()})();
+    Reveal.initialize({hash:true,transition:'fade',transitionSpeed:'slow',backgroundTransition:'fade',controls:true,progress:true,center:true,width:1200,height:700});
   </script>
-
 </body>
 </html>
