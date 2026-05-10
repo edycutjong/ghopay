@@ -1,6 +1,6 @@
 <div align="center">
 
-# 👻 Ghopay — Ghost Payroll on Solana
+<h1>Ghopay 👻</h1>
 
 <p><strong>Private batch payroll for DAOs.</strong> Institutional-grade payroll protocol using Cloak SDK for stealth addresses and batch transfers on Solana. Ensure team privacy without losing treasury auditability.</p>
 
